@@ -1,0 +1,12 @@
+-- CreateTable
+CREATE TABLE `Log` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `status` VARCHAR(100) NULL,
+    `timestamp` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `pc_id` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Log` ADD CONSTRAINT `Log_pc_id_fkey` FOREIGN KEY (`pc_id`) REFERENCES `Pc`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

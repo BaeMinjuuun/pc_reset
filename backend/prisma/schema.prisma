@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model test {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(100)
+}
+
+model Group {
+  id        Int     @id @default(autoincrement())
+  name      String? @db.VarChar(100)
+  parent_id Int?
+  spare     String? @db.VarChar(255)
+  parent    Group?  @relation("GroupRelation", fields: [parent_id], references: [id])
+  children  Group[] @relation("GroupRelation")
+  pcs       Pc[]    @relation("GroupToPc")
+
+  @@index([parent_id], map: "Group_parent_id_fkey")
+}
+
+model Pc {
+  id            Int     @id @default(autoincrement())
+  name          String? @db.VarChar(100)
+  ip            String? @db.VarChar(100)
+  mac           String? @db.VarChar(100)
+  period        Int     @default(5)
+  status        String? @db.VarChar(50)
+  // board_status  String? @db.VarChar(50)
+  group_id      Int?
+  serial_number String? @db.VarChar(100) @unique
+  group         Group?  @relation("GroupToPc", fields: [group_id], references: [id])
+  ts             DateTime 
+  logs          Log[]   @relation("PcLogs")
+  // time_over     Int?    @default(300)
+
+  @@index([group_id], map: "Pc_group_id_fkey")
+}
+
+model Log {
+  id        Int      @id @default(autoincrement())
+  status    String?  @db.VarChar(100)
+  timestamp DateTime @default(now()) // 기본값으로 현재 시간 설정
+  pc_id     Int?
+  pc        Pc?      @relation("PcLogs", fields: [pc_id], references: [id])
+}
+
+model ChangesLog {
+  id        Int      @id @default(autoincrement())
+  item     String?  @db.VarChar(100)
+  description    String?  @db.VarChar(100)
+  timestamp DateTime @default(now()) // 기본값으로 현재 시간 설정
+  user_id  String? @db.VarChar(100)
+}
+
+model User {
+  user_id         String @id @unique @db.VarChar(100) // 아이디
+  password        String @db.VarChar(100) // 비밀번호
+  name            String @db.VarChar(50)  // 이름
+  authority       Int    @default(1)      // 권한
+  assigned_group  Int?                    // 배정된 그룹
+  email           String @db.VarChar(100) // 이메일
+  phone           String @db.VarChar(30)  // 전화번호
+  notices         Notice[] @relation("UserNotices")
+}
+
+model Notice {
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(300)
+  content        String   @db.VarChar(300)
+  time_stamp     DateTime @default(now())
+  view_cnt       Int      @default(0)
+  user_id        String
+  user           User     @relation("UserNotices", fields: [user_id], references: [user_id])
+
+  @@index([user_id])
+}

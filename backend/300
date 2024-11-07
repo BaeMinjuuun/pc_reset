@@ -1,0 +1,19 @@
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": MySQL database "PReM" at "192.168.1.8:3306"
+
+Applying migration `20240926021750_change`
+
+The following migration(s) have been created and applied from new schema changes:
+
+migrations/
+  └─ 20240926021750_change/
+    └─ migration.sql
+
+Your database is now in sync with your schema.
+
+Running generate... (Use --skip-generate to skip the generators)
+[2K[1A[2K[GRunning generate... - Prisma Client
+[2K[1A[2K[G✔ Generated Prisma Client (v5.19.1) to ./node_modules/@prisma/client in 111ms
+
+

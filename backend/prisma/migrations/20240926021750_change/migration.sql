@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Pc` MODIFY `time_over` INTEGER NULL DEFAULT 300;

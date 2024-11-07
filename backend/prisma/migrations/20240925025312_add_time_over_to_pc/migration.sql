@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Pc` ADD COLUMN `time_over` INTEGER NULL DEFAULT 30;
